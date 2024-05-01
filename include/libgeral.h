@@ -19,6 +19,7 @@ int hash2(int chave, int tamanho_hash);
 int inserir(thash *hash, tcidade bucket, int numCidade);
 int construir(thash *hash);
 tcidade *buscar(thash hash, int chave);
+void deletarHash(thash *hash);
 int lerArquivo(const char *caminhoArquivo, thash *hash);
 
 #endif

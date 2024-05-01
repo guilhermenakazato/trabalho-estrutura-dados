@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
 #include "../include/libgeral.h"
 #define SEED 239
 #define SIZE 10007
@@ -58,4 +56,8 @@ tcidade *buscar(thash hash, int chave) {
     } while(hash.vetor[pos].codigo_ibge != 0);
 
     return NULL;
+}
+
+void deletarHash(thash *hash) {
+    free(hash->vetor);
 }
