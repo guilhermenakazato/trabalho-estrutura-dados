@@ -44,15 +44,17 @@ int inserir(thash *hash, tcidade bucket, int numCidade) {
 
 tcidade *buscar(thash hash, int chave) {
     int pos;
+    int i = 0;
 
     do {
-        int i = 0;
         int resultadoHash1 = hash1(chave, SEED, hash.tamanho_max);
         int resultadoHash2 = hash2(chave, hash.tamanho_max);
         int pos = (resultadoHash1 + i * resultadoHash2) % hash.tamanho_max;
     
         if(chave == hash.vetor[pos].codigo_ibge)
             return &hash.vetor[pos];
+
+        i++;
     } while(hash.vetor[pos].codigo_ibge != 0);
 
     return NULL;

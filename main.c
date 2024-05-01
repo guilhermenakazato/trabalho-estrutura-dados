@@ -60,11 +60,11 @@ int main() {
                 break;
             case 3: 
                 printf("Tchau!\n");
-                deletarHash(&hash);
                 break;
             default: 
                 printf("Opção inválida!\n\n");
                 break;
         }
     } while(op != 3);
+    deletarHash(&hash);
 }
