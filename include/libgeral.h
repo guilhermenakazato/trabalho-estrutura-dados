@@ -16,10 +16,35 @@ typedef struct {
 
 int hash1(int chave, int seed, int tamanho_hash);
 int hash2(int chave, int tamanho_hash);
-int inserir(thash *hash, tcidade bucket, int numCidade);
-int construir(thash *hash);
-tcidade *buscar(thash hash, int chave);
+int inserirHash(thash *hash, tcidade bucket);
+int construirHash(thash *hash);
+tcidade *buscarHash(thash hash, int chave);
 void deletarHash(thash *hash);
-int lerArquivo(const char *caminhoArquivo, thash *hash);
+
+typedef struct {
+    int codigo_ibge;
+    float distancia;
+} tvizinho;
+
+typedef struct {
+    int codigo_ibge;
+    float latitude, longitude;
+} elementoNo;
+
+typedef struct _no {
+    elementoNo elemento;
+    struct _no *esq;
+    struct _no *dir;
+} tnode;
+
+typedef struct {
+    tnode *raiz;
+} ttree;
+
+int inserirArvore(ttree *arvore, tnode **atual, elementoNo node, int nivel);
+int vizinhosProximos(tnode *atual, tcidade *cidade, int nivel);
+void construirArvore(ttree *arvore);
+
+int lerArquivo(const char *caminhoArquivo, thash *hash, ttree *arvore);
 
 #endif

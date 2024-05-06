@@ -12,7 +12,7 @@ int hash2(int chave, int tamanho_hash) {
     return 1 + (chave % (--tamanho_hash));
 }
 
-int construir(thash *hash) {
+int construirHash(thash *hash) {
     hash->vetor = (tcidade *) calloc(SIZE, sizeof(tcidade));
     if(hash->vetor == NULL) {
         return EXIT_FAILURE;
@@ -24,7 +24,7 @@ int construir(thash *hash) {
     return EXIT_SUCCESS;
 }
 
-int inserir(thash *hash, tcidade bucket, int numCidade) {
+int inserirHash(thash *hash, tcidade bucket) {
     int pos;
     int i = 0;
 
@@ -35,14 +35,14 @@ int inserir(thash *hash, tcidade bucket, int numCidade) {
 
         i++;
     } while(hash->vetor[pos].codigo_ibge != 0);
-
+    
     hash->vetor[pos] = bucket;
     hash->qtde_elementos += 1;
 
     return EXIT_SUCCESS;
 }
 
-tcidade *buscar(thash hash, int chave) {
+tcidade *buscarHash(thash hash, int chave) {
     int pos;
     int i = 0;
 
@@ -50,6 +50,7 @@ tcidade *buscar(thash hash, int chave) {
         int resultadoHash1 = hash1(chave, SEED, hash.tamanho_max);
         int resultadoHash2 = hash2(chave, hash.tamanho_max);
         int pos = (resultadoHash1 + i * resultadoHash2) % hash.tamanho_max;
+        printf("%d\n", hash.vetor[pos].codigo_uf);
     
         if(chave == hash.vetor[pos].codigo_ibge)
             return &hash.vetor[pos];

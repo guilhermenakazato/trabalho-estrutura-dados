@@ -3,9 +3,8 @@
 #include <string.h>
 #include "../include/libgeral.h"
 
-int lerArquivo(const char *caminhoArquivo, thash *hash) {
+int lerArquivo(const char *caminhoArquivo, thash *hash, ttree *arvore) {
     FILE* arquivo;
-    int numCidade = 1;
     arquivo = fopen(caminhoArquivo, "r");
     char linha[50];
     char atributos[][30] = {"codigo_ibge", "nome", "latitude",
@@ -16,17 +15,21 @@ int lerArquivo(const char *caminhoArquivo, thash *hash) {
         return EXIT_FAILURE;
     } else {
         tcidade cidade;
+        elementoNo elemento;
         char fuso_horario2[30];
 
         while(fgets(linha, 50, arquivo) != NULL) {
             if(strstr(linha, atributos[0]) != NULL) {
                 sscanf(linha, "%*s %d", &cidade.codigo_ibge);
+                // elemento.codigo_ibge = cidade.codigo_ibge;
             } else if(strstr(linha, atributos[1]) != NULL) {
                 sscanf(linha, "%*s \"%[^\"]", cidade.nome);
             } else if(strstr(linha, atributos[2]) != NULL) {
                 sscanf(linha, "%*s %f", &cidade.latitude);
+                // elemento.latitude = cidade.latitude;
             } else if(strstr(linha, atributos[3]) != NULL) {
                 sscanf(linha, "%*s %f", &cidade.longitude);
+                // elemento.longitude = cidade.longitude;
             } else if(strstr(linha, atributos[4]) != NULL) {
                 sscanf(linha, "%*s %d", &cidade.capital);
             } else if(strstr(linha, atributos[5]) != NULL) {
@@ -39,8 +42,8 @@ int lerArquivo(const char *caminhoArquivo, thash *hash) {
                 sscanf(linha, "%*s \"America\\%[^\"]", fuso_horario2);
                 strcpy(cidade.fuso_horario, "America");
                 strcat(cidade.fuso_horario, fuso_horario2);
-                inserir(hash, cidade, numCidade);
-                numCidade++;
+                inserirHash(hash, cidade);
+                inserirArvore(arvore, &arvore->raiz, elemento, 0);
             }
         }
     }
