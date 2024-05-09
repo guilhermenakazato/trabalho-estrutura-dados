@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 #include "../include/libgeral.h"
 
 void construirArvore(ttree *arvore) {
@@ -32,26 +33,35 @@ int inserirArvore(ttree *arvore, tnode **atual, elementoNo node, int nivel) {
     return EXIT_FAILURE;
 }
 
-// pegar codigo retornado pra usar e comparar dps........
-int vizinhosProximos(tnode *atual, tcidade *cidade, int nivel) {
-    if(atual != NULL) {
-        int comp; 
+float vizinhosProximos(tnode **atual, tcidade *cidade, int nivel) {
+    float distancia; 
+    float menorDistancia = 999999999;
 
-        if(nivel % 2) 
-            comp = atual->elemento.longitude - cidade->longitude;
+    if(*atual != NULL) {
+        int comp;
+
+        if(nivel % 2)
+            comp = (*atual)->elemento.longitude - cidade->longitude;
         else 
-            comp = atual->elemento.latitude - cidade->latitude;
+            comp = (*atual)->elemento.latitude - cidade->latitude;
+        
+        distancia = sqrt(pow(cidade->latitude - (*atual)->elemento.latitude, 2) + pow(cidade->longitude - (*atual)->elemento.longitude, 2));
 
-        float distancia = sqrt(pow(cidade->latitude - atual->elemento.latitude, 2) + pow(cidade->longitude - atual->elemento.longitude, 2));
-        if(distancia < menorDistancia) {
+        if(distancia < menorDistancia && distancia > 0)
             menorDistancia = distancia;
-            codigoRetornado = atual->elemento.codigo_ibge;
-        }
 
-        if(comp > 0) {
-            vizinhosProximos(atual->esq, cidade, ++nivel, menorDistancia);
-        } else {    
-            vizinhosProximos(atual->dir, cidade, ++nivel, menorDistancia);
-        }   
+        if(comp < 0) {
+            menorDistancia = fmin(menorDistancia, vizinhosProximos(&(*atual)->dir, cidade, ++nivel));
+
+            if(menorDistancia > abs(comp))
+                vizinhosProximos(&(*atual)->esq, cidade, ++nivel);
+        } else {
+            menorDistancia = fmin(menorDistancia, vizinhosProximos(&(*atual)->esq, cidade, ++nivel));
+
+            if(menorDistancia > comp)
+                vizinhosProximos(&(*atual)->dir, cidade, ++nivel);
+        }
     }
+
+    return menorDistancia;
 }

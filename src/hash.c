@@ -49,8 +49,7 @@ tcidade *buscarHash(thash hash, int chave) {
     do {
         int resultadoHash1 = hash1(chave, SEED, hash.tamanho_max);
         int resultadoHash2 = hash2(chave, hash.tamanho_max);
-        int pos = (resultadoHash1 + i * resultadoHash2) % hash.tamanho_max;
-        printf("%d\n", hash.vetor[pos].codigo_uf);
+        pos = (resultadoHash1 + i * resultadoHash2) % hash.tamanho_max;
     
         if(chave == hash.vetor[pos].codigo_ibge)
             return &hash.vetor[pos];

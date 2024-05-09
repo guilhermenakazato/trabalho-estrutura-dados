@@ -24,10 +24,11 @@ int main() {
     int cidadesJaInseridas;
     thash hash;
     ttree arvore;
+    int codigoIbge;
 
     construirHash(&hash);
     construirArvore(&arvore);
-    cidadesJaInseridas = lerArquivo("./data/municipios.json", &hash, &arvore);
+    cidadesJaInseridas = lerArquivo("./data/municipios2.json", &hash, &arvore);
 
     if (cidadesJaInseridas == EXIT_SUCCESS) {
         do {
@@ -36,7 +37,6 @@ int main() {
 
             switch (op) {
             case 1:
-                int codigoIbge;
 
                 do {
                     printf("Insira o código IBGE da cidade que deseja buscar: ");
@@ -46,13 +46,17 @@ int main() {
                         printf("Código inválido! Tente novamente.\n\n");
                     } else {
                         tcidade *cidade = buscarHash(hash, codigoIbge);
-                        infoCidade(*cidade);
+
+                        if(cidade == NULL) {
+                            printf("Cidade não encontrada.\n\n");
+                        } else {
+                            infoCidade(*cidade);
+                        }
                     }
                 } while (codigoIbge <= 0);
                 break;
-            case 2:
-                int codigoIbge;
-
+            case 2:                
+                preOrdem(&arvore, &arvore.raiz);
                 do {
                     printf("Insira o código IBGE da cidade que verifica buscar o vizinho mais próximo: ");
                     scanf("%d", &codigoIbge);
@@ -60,9 +64,14 @@ int main() {
                     if (codigoIbge <= 0) {
                         printf("Código inválido! Tente novamente.\n\n");
                     } else {
-                        vizinhosProximos()
                         tcidade *cidade = buscarHash(hash, codigoIbge);
-                        infoCidade(*cidade);
+
+                        if(cidade == NULL) {
+                            printf("Cidade não encontrada.\n\n");
+                            codigoIbge = -1;
+                        } else {
+                            printf("%.2f\n", vizinhosProximos(&arvore.raiz, cidade, 0));
+                        }
                     }
                 } while (codigoIbge <= 0);
 

@@ -42,7 +42,7 @@ typedef struct {
 } ttree;
 
 int inserirArvore(ttree *arvore, tnode **atual, elementoNo node, int nivel);
-int vizinhosProximos(tnode *atual, tcidade *cidade, int nivel);
+float vizinhosProximos(tnode **atual, tcidade *cidade, int nivel);
 void construirArvore(ttree *arvore);
 
 int lerArquivo(const char *caminhoArquivo, thash *hash, ttree *arvore);

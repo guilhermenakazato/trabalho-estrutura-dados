@@ -21,15 +21,15 @@ int lerArquivo(const char *caminhoArquivo, thash *hash, ttree *arvore) {
         while(fgets(linha, 50, arquivo) != NULL) {
             if(strstr(linha, atributos[0]) != NULL) {
                 sscanf(linha, "%*s %d", &cidade.codigo_ibge);
-                // elemento.codigo_ibge = cidade.codigo_ibge;
+                elemento.codigo_ibge = cidade.codigo_ibge;
             } else if(strstr(linha, atributos[1]) != NULL) {
                 sscanf(linha, "%*s \"%[^\"]", cidade.nome);
             } else if(strstr(linha, atributos[2]) != NULL) {
                 sscanf(linha, "%*s %f", &cidade.latitude);
-                // elemento.latitude = cidade.latitude;
+                elemento.latitude = cidade.latitude;
             } else if(strstr(linha, atributos[3]) != NULL) {
                 sscanf(linha, "%*s %f", &cidade.longitude);
-                // elemento.longitude = cidade.longitude;
+                elemento.longitude = cidade.longitude;
             } else if(strstr(linha, atributos[4]) != NULL) {
                 sscanf(linha, "%*s %d", &cidade.capital);
             } else if(strstr(linha, atributos[5]) != NULL) {
