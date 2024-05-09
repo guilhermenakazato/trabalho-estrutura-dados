@@ -56,7 +56,6 @@ int main() {
                 } while (codigoIbge <= 0);
                 break;
             case 2:                
-                preOrdem(&arvore, &arvore.raiz);
                 do {
                     printf("Insira o código IBGE da cidade que verifica buscar o vizinho mais próximo: ");
                     scanf("%d", &codigoIbge);

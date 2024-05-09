@@ -54,12 +54,12 @@ float vizinhosProximos(tnode **atual, tcidade *cidade, int nivel) {
             menorDistancia = fmin(menorDistancia, vizinhosProximos(&(*atual)->dir, cidade, ++nivel));
 
             if(menorDistancia > abs(comp))
-                vizinhosProximos(&(*atual)->esq, cidade, ++nivel);
+                menorDistancia = fmin(menorDistancia, vizinhosProximos(&(*atual)->esq, cidade, ++nivel));
         } else {
             menorDistancia = fmin(menorDistancia, vizinhosProximos(&(*atual)->esq, cidade, ++nivel));
 
             if(menorDistancia > comp)
-                vizinhosProximos(&(*atual)->dir, cidade, ++nivel);
+                menorDistancia = fmin(menorDistancia, vizinhosProximos(&(*atual)->dir, cidade, ++nivel));
         }
     }
 
