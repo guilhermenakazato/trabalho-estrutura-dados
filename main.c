@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include "./include/libgeral.h"
 
@@ -9,7 +10,8 @@ void menu()
 }
 
 void infoCidade(tcidade cidade) {
-    printf("\nNome da cidade: %s\n", cidade.nome);
+    printf("\nCódigo da cidade: %d\n", cidade.codigo_ibge);
+    printf("Nome da cidade: %s\n", cidade.nome);
     printf("Latitude: %f\n", cidade.latitude);
     printf("Longitude: %f\n", cidade.longitude);
     printf("É capital? %s\n", cidade.capital == 0 ? "Não" : "Sim");
@@ -28,7 +30,7 @@ int main() {
 
     construirHash(&hash);
     construirArvore(&arvore);
-    cidadesJaInseridas = lerArquivo("./data/municipios2.json", &hash, &arvore);
+    cidadesJaInseridas = lerArquivo("./data/municipios.json", &hash, &arvore);
 
     if (cidadesJaInseridas == EXIT_SUCCESS) {
         do {
@@ -57,7 +59,7 @@ int main() {
                 break;
             case 2:                
                 do {
-                    printf("Insira o código IBGE da cidade que verifica buscar o vizinho mais próximo: ");
+                    printf("Insira o código IBGE da cidade que deseja buscar o vizinho mais próximo: ");
                     scanf("%d", &codigoIbge);
 
                     if (codigoIbge <= 0) {
@@ -69,7 +71,13 @@ int main() {
                             printf("Cidade não encontrada.\n\n");
                             codigoIbge = -1;
                         } else {
-                            printf("%.2f\n", vizinhosProximos(&arvore.raiz, cidade, 0));
+                            tvizinho vizinhoMaisProximo = vizinhosProximos(&arvore.raiz, cidade, 0);
+                            tcidade *cidade = buscarHash(hash, vizinhoMaisProximo.codigo_ibge);
+                            float menor = 99999999;
+
+                            printf("%f", preOrdem(&arvore.raiz, *buscarHash(hash, 5002704), &menor));
+                            infoCidade(*cidade);
+                            printf("Distância: %.2f\n", vizinhoMaisProximo.distancia);
                         }
                     }
                 } while (codigoIbge <= 0);
