@@ -75,15 +75,3 @@ tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel) {
 
     return maisProximo;
 }
-
-float preOrdem(tnode **atual, tcidade cidade, float *menor) {
-    if(*atual != NULL) {
-        float distancia = sqrt(pow(cidade.latitude - (*atual)->elemento.latitude, 2) + pow(cidade.longitude - (*atual)->elemento.longitude, 2));;
-
-        if(distancia < *menor && distancia > 0) 
-            *menor = distancia;      
-       
-        preOrdem(&(*atual)->esq, cidade, menor);
-        preOrdem(&(*atual)->dir, cidade, menor);
-    }
-}

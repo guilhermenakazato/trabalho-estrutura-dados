@@ -73,9 +73,7 @@ int main() {
                         } else {
                             tvizinho vizinhoMaisProximo = vizinhosProximos(&arvore.raiz, cidade, 0);
                             tcidade *cidade = buscarHash(hash, vizinhoMaisProximo.codigo_ibge);
-                            float menor = 99999999;
 
-                            printf("%f", preOrdem(&arvore.raiz, *buscarHash(hash, 5002704), &menor));
                             infoCidade(*cidade);
                             printf("Distância: %.2f\n", vizinhoMaisProximo.distancia);
                         }

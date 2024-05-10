@@ -47,9 +47,14 @@ tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel);
 void construirArvore(ttree *arvore);
 
 // heap
+typedef struct {
+    tvizinho *vizinhos;
+    int tamanho_max;
+    int qtde_elementos;
+} theap;
+
 
 // geral
 int lerArquivo(const char *caminhoArquivo, thash *hash, ttree *arvore);
-float preOrdem(tnode **atual, tcidade cidade, float *menor);
 
 #endif

@@ -19,82 +19,84 @@ int filho_dir(int pos_pai) {
     return pos_pai * 2 + 2;
 }
 
-void desce(int vetor[], int n, int tamanho_vetor) {
+void desce(tvizinho vetor[], int n, theap heap) {
     int esquerdo = filho_esq(n);
     int direito = filho_dir(n);
     int maior = n;
 
-    if(esquerdo < tamanho_vetor && vetor[esquerdo] > vetor[maior]) {
+    if(esquerdo < heap.qtde_elementos && vetor[esquerdo].distancia > vetor[maior].distancia) {
         maior = esquerdo;
     }
     
-    if(direito < tamanho_vetor && vetor[direito] > vetor[maior]) {
+    if(direito < heap.qtde_elementos && vetor[direito].distancia > vetor[maior].distancia) {
         maior = direito;
     }
 
     if(maior != n) {
         troca(&vetor[maior], &vetor[n]);
-        desce(vetor, maior, tamanho_vetor);
+        desce(vetor, maior, heap);
     }
 }
 
-void constroi_heap(int vetor[], int tamanho) {
-    int pai_atual = pai(tamanho - 1);
+void constroi_heap(tvizinho vetor[], theap heap) {
+    int pai_atual = pai(heap.qtde_elementos - 1);
 
     while(pai_atual >= 0) {
-        desce(vetor, pai_atual, tamanho);
+        desce(vetor, pai_atual, heap);
         pai_atual--;
     }
 }
 
-void sobe(int vetor[], int n) {
+void sobe(tvizinho vetor[], int n) {
     int pos_pai = pai(n);
 
-    if(vetor[n] > vetor[pos_pai]) {
+    if(vetor[n].distancia > vetor[pos_pai].distancia) {
         troca(&vetor[pos_pai], &vetor[n]);
         sobe(vetor, pos_pai);
     }
 }
 
-int acessa_max(int vetor[]) {
+tvizinho acessa_max(tvizinho vetor[]) {
     return vetor[0];
 }
 
-int extrai_max(int vetor[], int *tam) {
-    int max = vetor[0];
-    vetor[0] = vetor[--*tam];
+tvizinho extrai_max(tvizinho vetor[], theap *heap) {
+    tvizinho max = vetor[0];
+    heap->qtde_elementos--;
+    vetor[0] = vetor[heap->qtde_elementos];
 
-    desce(vetor, 0, *tam);
+    desce(vetor, 0, *heap);
     return max;
 }
 
-void altera_prioridade(int vetor[], int tamanho, int n, int valor) {
-    if(vetor[n] < valor) {
-        vetor[n] = valor;
+void altera_prioridade(tvizinho vetor[], theap heap, int n, tvizinho novoVizinho) {
+    if(vetor[n].distancia < novoVizinho.distancia) {
+        vetor[n] = novoVizinho;
         sobe(vetor, n);
     } else {
-        vetor[n] = valor;
-        desce(vetor, n, tamanho);
+        vetor[n] = novoVizinho;
+        desce(vetor, n, heap);
     }
 }
 
-int insere_elemento(int vetor[], int *tamanho, int max, int valor) {
-    if(*tamanho == max) {
+int insere_elemento(tvizinho vetor[], theap *heap, tvizinho novoVizinho) {
+    if(heap->qtde_elementos == heap->tamanho_max) {
         return EXIT_FAILURE;
     } else {
-        vetor[*tamanho] = valor;
-        ++*tamanho;
+        vetor[heap->qtde_elementos] = novoVizinho;
+        heap->qtde_elementos += 1;
 
-        sobe(vetor, *tamanho - 1);
+        sobe(vetor, heap->qtde_elementos - 1);
         return EXIT_SUCCESS;
     }
 }
 
-void heap_sort(int vetor[], int tamanho) {
-    constroi_heap(vetor, tamanho);
+void heap_sort(tvizinho vetor[], theap heap) {
+    constroi_heap(vetor, heap);
 
-    while(tamanho > 0) {
-        troca(&vetor[0], &vetor[--tamanho]);
-        desce(vetor, 0, tamanho);
+    while(heap.qtde_elementos > 0) {
+        heap.qtde_elementos--;
+        troca(&vetor[0], &vetor[heap.qtde_elementos]);
+        desce(vetor, 0, heap);
     }
 }
