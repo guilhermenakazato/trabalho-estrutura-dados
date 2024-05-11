@@ -40,13 +40,13 @@ tvizinho comparaMinDistancia(tvizinho vizinho1, tvizinho vizinho2) {
     return vizinho2;
 }
 
-tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel) {
+tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel, theap *heap) {
     float distancia; 
     tvizinho maisProximo;
     maisProximo.distancia = 999999999;
 
     if(*atual != NULL) {
-        int comp;
+        int comp;   
 
         if(nivel % 2)
             comp = (*atual)->elemento.longitude - cidade->longitude;
@@ -57,20 +57,31 @@ tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel) {
 
         if(distancia < maisProximo.distancia && distancia > 0) {
             maisProximo.distancia = distancia;
-            maisProximo.codigo_ibge = (*atual)->elemento.codigo_ibge;
+            maisProximo.codigo_ibge = (*atual)->elemento.codigo_ibge;        
         }
 
         if(comp < 0) {
-            maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->dir, cidade, ++nivel));
-
-            if(maisProximo.distancia > comp)
-                maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->esq, cidade, ++nivel));
+            maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->dir, cidade, ++nivel, heap));
+            
+            if(maisProximo.distancia > comp || heap->qtde_elementos != heap->tamanho_max)
+                maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->esq, cidade, ++nivel, heap));
+            
         } else {
-            maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->esq, cidade, ++nivel));
+            maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->esq, cidade, ++nivel, heap));
 
-            if(maisProximo.distancia > comp)
-                maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->dir, cidade, ++nivel));
+            if(maisProximo.distancia > comp || heap->qtde_elementos != heap->tamanho_max)
+                maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->dir, cidade, ++nivel, heap));
         }
+    }
+
+    if(heap->qtde_elementos != heap->tamanho_max) {
+        printf("Hello\n");
+        insere_elemento(heap->vizinhos, heap, maisProximo);
+        printf("Pos 0: %d\n", heap->vizinhos[0].codigo_ibge);
+        printf("Mais proximo: %d\n", maisProximo.codigo_ibge);
+    } else if(maisProximo.distancia < acessa_max(heap->vizinhos).distancia) {
+        altera_prioridade(heap->vizinhos, *heap, 0, maisProximo);
+        printf("Pos 0: %d\n", heap->vizinhos[0].codigo_ibge);
     }
 
     return maisProximo;

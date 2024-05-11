@@ -1,8 +1,9 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "../include/libgeral.h"
 
-void troca(int *pos1, int *pos2) {
-    int temp = *pos1;
+void troca(tvizinho *pos1, tvizinho *pos2) {
+    tvizinho temp = *pos1;
     *pos1 = *pos2;
     *pos2 = temp;
 }
@@ -17,6 +18,17 @@ int filho_esq(int pos_pai) {
 
 int filho_dir(int pos_pai) {
     return pos_pai * 2 + 2;
+}
+
+int inicializaHeap(theap *heap, int n) {
+    heap->vizinhos = (tvizinho *) malloc(sizeof(tvizinho) * n);
+
+    if(heap->vizinhos == NULL) {
+        return EXIT_FAILURE;
+    }
+
+    heap->qtde_elementos = 0;
+    heap->tamanho_max = n;
 }
 
 void desce(tvizinho vetor[], int n, theap heap) {

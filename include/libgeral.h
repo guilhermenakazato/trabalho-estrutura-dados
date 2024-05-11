@@ -42,17 +42,22 @@ typedef struct {
     double distancia;
 } tvizinho;
 
-int inserirArvore(ttree *arvore, tnode **atual, telementoNo node, int nivel);
-tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel);
-void construirArvore(ttree *arvore);
-
-// heap
 typedef struct {
     tvizinho *vizinhos;
     int tamanho_max;
     int qtde_elementos;
 } theap;
 
+int inserirArvore(ttree *arvore, tnode **atual, telementoNo node, int nivel);
+tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel, theap *heap);
+void construirArvore(ttree *arvore);
+
+// heap
+int inicializaHeap(theap *heap, int n);
+tvizinho acessa_max(tvizinho vetor[]);
+void altera_prioridade(tvizinho vetor[], theap heap, int n, tvizinho novoVizinho);
+int insere_elemento(tvizinho vetor[], theap *heap, tvizinho novoVizinho);
+void heap_sort(tvizinho vetor[], theap heap);
 
 // geral
 int lerArquivo(const char *caminhoArquivo, thash *hash, ttree *arvore);

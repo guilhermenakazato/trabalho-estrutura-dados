@@ -5,7 +5,7 @@
 
 void menu()
 {
-    printf("Opções:\n1 - Buscar cidade\n2 - Procurar vizinho mais próximo\n3 - Sair\n");
+    printf("Opções:\n1 - Buscar cidade\n2 - Buscar os N vizinhos mais próximos\n3 - Sair\n");
     printf("Insira a opção desejada: ");
 }
 
@@ -24,13 +24,15 @@ void infoCidade(tcidade cidade) {
 int main() {
     int op = 0;
     int cidadesJaInseridas;
+    int n;
+    int codigoIbge;
     thash hash;
     ttree arvore;
-    int codigoIbge;
+    theap heap;
 
     construirHash(&hash);
     construirArvore(&arvore);
-    cidadesJaInseridas = lerArquivo("./data/municipios.json", &hash, &arvore);
+    cidadesJaInseridas = lerArquivo("./data/municipios2.json", &hash, &arvore);
 
     if (cidadesJaInseridas == EXIT_SUCCESS) {
         do {
@@ -59,22 +61,33 @@ int main() {
                 break;
             case 2:                
                 do {
-                    printf("Insira o código IBGE da cidade que deseja buscar o vizinho mais próximo: ");
+                    printf("Insira o código IBGE da cidade: ");
                     scanf("%d", &codigoIbge);
 
                     if (codigoIbge <= 0) {
                         printf("Código inválido! Tente novamente.\n\n");
                     } else {
                         tcidade *cidade = buscarHash(hash, codigoIbge);
-
+                        
                         if(cidade == NULL) {
                             printf("Cidade não encontrada.\n\n");
                             codigoIbge = -1;
                         } else {
-                            tvizinho vizinhoMaisProximo = vizinhosProximos(&arvore.raiz, cidade, 0);
+                            printf("Insira a quantidade de vizinhos que deseja buscar: ");
+                            scanf("%d", &n);
+
+                            if(n <= 0) {
+                                printf("Quantidade inválida! Tente novamente.\n\n");
+                                codigoIbge = -1;
+                            } else {
+                                inicializaHeap(&heap, n);
+                            }
+
+                            tvizinho vizinhoMaisProximo = vizinhosProximos(&arvore.raiz, cidade, 0, &heap);
                             tcidade *cidade = buscarHash(hash, vizinhoMaisProximo.codigo_ibge);
 
                             infoCidade(*cidade);
+                            printf("%d\n", heap.vizinhos[0].codigo_ibge);
                             printf("Distância: %.2f\n", vizinhoMaisProximo.distancia);
                         }
                     }

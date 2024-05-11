@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
-    float a, b;
-    a = 1.000;
-    b = 1.00000;
+    int *vetor;
+    vetor = (int *) calloc(10, sizeof(int));
+    vetor[0] = 10;
 
-    printf("%f", a - b);
+    printf("%d\n", vetor[0]);
 }
