@@ -32,7 +32,7 @@ int main() {
 
     construirHash(&hash);
     construirArvore(&arvore);
-    cidadesJaInseridas = lerArquivo("./data/municipios2.json", &hash, &arvore);
+    cidadesJaInseridas = lerArquivo("./data/municipios.json", &hash, &arvore);
 
     if (cidadesJaInseridas == EXIT_SUCCESS) {
         do {
@@ -84,11 +84,12 @@ int main() {
                             }
 
                             tvizinho vizinhoMaisProximo = vizinhosProximos(&arvore.raiz, cidade, 0, &heap);
-                            tcidade *cidade = buscarHash(hash, vizinhoMaisProximo.codigo_ibge);
+                            heap_sort(heap.vizinhos, heap);
 
-                            infoCidade(*cidade);
-                            printf("%d\n", heap.vizinhos[0].codigo_ibge);
-                            printf("Distância: %.2f\n", vizinhoMaisProximo.distancia);
+                            for(int i = 0; i < heap.qtde_elementos; i++) {
+                                tcidade *cidade = buscarHash(hash, heap.vizinhos[i].codigo_ibge);
+                                infoCidade(*cidade);
+                            }
                         }
                     }
                 } while (codigoIbge <= 0);

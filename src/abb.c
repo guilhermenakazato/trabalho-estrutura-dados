@@ -57,31 +57,27 @@ tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel, theap *heap
 
         if(distancia < maisProximo.distancia && distancia > 0) {
             maisProximo.distancia = distancia;
-            maisProximo.codigo_ibge = (*atual)->elemento.codigo_ibge;        
+            maisProximo.codigo_ibge = (*atual)->elemento.codigo_ibge;      
+
+            if(heap->qtde_elementos < heap->tamanho_max) {
+                insere_elemento(heap->vizinhos, heap, maisProximo);
+            } else if(maisProximo.distancia < acessa_max(heap->vizinhos).distancia) {
+                altera_prioridade(heap->vizinhos, *heap, 0, maisProximo);
+            }  
         }
 
         if(comp < 0) {
             maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->dir, cidade, ++nivel, heap));
             
-            if(maisProximo.distancia > comp || heap->qtde_elementos != heap->tamanho_max)
+            if(maisProximo.distancia > comp || heap->qtde_elementos < heap->tamanho_max)
                 maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->esq, cidade, ++nivel, heap));
             
         } else {
             maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->esq, cidade, ++nivel, heap));
 
-            if(maisProximo.distancia > comp || heap->qtde_elementos != heap->tamanho_max)
+            if(maisProximo.distancia > comp || heap->qtde_elementos < heap->tamanho_max)
                 maisProximo = comparaMinDistancia(maisProximo, vizinhosProximos(&(*atual)->dir, cidade, ++nivel, heap));
         }
-    }
-
-    if(heap->qtde_elementos != heap->tamanho_max) {
-        printf("Hello\n");
-        insere_elemento(heap->vizinhos, heap, maisProximo);
-        printf("Pos 0: %d\n", heap->vizinhos[0].codigo_ibge);
-        printf("Mais proximo: %d\n", maisProximo.codigo_ibge);
-    } else if(maisProximo.distancia < acessa_max(heap->vizinhos).distancia) {
-        altera_prioridade(heap->vizinhos, *heap, 0, maisProximo);
-        printf("Pos 0: %d\n", heap->vizinhos[0].codigo_ibge);
     }
 
     return maisProximo;
