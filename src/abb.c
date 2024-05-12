@@ -8,10 +8,10 @@ void construirArvore(ttree *arvore) {
     arvore->raiz = NULL;
 }
 
-int inserirArvore(ttree *arvore, tnode **atual, tcidade node, int nivel) {
+int inserirArvore(ttree *arvore, tnode **atual, telemento node, int nivel) {
     if(*atual == NULL) {
         *atual = malloc(sizeof(tnode));
-        (*atual)->cidade = node;
+        (*atual)->elemento = node;
         (*atual)->esq = NULL;
         (*atual)->dir = NULL;
 
@@ -20,9 +20,9 @@ int inserirArvore(ttree *arvore, tnode **atual, tcidade node, int nivel) {
         int resultadoComp;
         
         if(nivel % 2) 
-            resultadoComp = (*atual)->cidade.longitude - node.longitude;
+            resultadoComp = (*atual)->elemento.longitude - node.longitude;
         else 
-            resultadoComp = (*atual)->cidade.latitude - node.latitude;
+            resultadoComp = (*atual)->elemento.latitude - node.latitude;
 
         if(resultadoComp < 0) {
             inserirArvore(arvore, &(*atual)->dir, node, ++nivel);
@@ -50,15 +50,15 @@ tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel, theap *heap
         int comp;   
 
         if(nivel % 2)
-            comp = (*atual)->cidade.longitude - cidade->longitude;
+            comp = (*atual)->elemento.longitude - cidade->longitude;
         else 
-            comp = (*atual)->cidade.latitude - cidade->latitude;
+            comp = (*atual)->elemento.latitude - cidade->latitude;
         
-        distancia = sqrt(pow(cidade->latitude - (*atual)->cidade.latitude, 2) + pow(cidade->longitude - (*atual)->cidade.longitude, 2));
+        distancia = sqrt(pow(cidade->latitude - (*atual)->elemento.latitude, 2) + pow(cidade->longitude - (*atual)->elemento.longitude, 2));
 
         if(distancia < maisProximo.distancia && distancia > 0) {
             maisProximo.distancia = distancia;
-            maisProximo.cidade = (*atual)->cidade;
+            strcpy(maisProximo.codigo_ibge, (*atual)->elemento.codigo_ibge);
 
             if(heap->qtde_elementos < heap->tamanho_max) {
                 insere_elemento(heap->vizinhos, heap, maisProximo);

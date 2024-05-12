@@ -15,17 +15,21 @@ int lerArquivo(const char *caminhoArquivo, thash *hashIBGE, thash *hashNome, ttr
         return EXIT_FAILURE;
     } else {
         tcidade cidade;
+        telemento elemento;
         char fuso_horario2[30];
 
         while(fgets(linha, 50, arquivo) != NULL) {
             if(strstr(linha, atributos[0]) != NULL) {
                 sscanf(linha, "%*s %[^,]", cidade.codigo_ibge);
+                strcpy(elemento.codigo_ibge, cidade.codigo_ibge);
             } else if(strstr(linha, atributos[1]) != NULL) {
                 sscanf(linha, "%*s \"%[^\"]", cidade.nome);
             } else if(strstr(linha, atributos[2]) != NULL) {
                 sscanf(linha, "%*s %lf", &cidade.latitude);
+                elemento.latitude = cidade.latitude;
             } else if(strstr(linha, atributos[3]) != NULL) {
                 sscanf(linha, "%*s %lf", &cidade.longitude);
+                elemento.longitude = cidade.longitude;
             } else if(strstr(linha, atributos[4]) != NULL) {
                 sscanf(linha, "%*s %d", &cidade.capital);
             } else if(strstr(linha, atributos[5]) != NULL) {
@@ -41,7 +45,7 @@ int lerArquivo(const char *caminhoArquivo, thash *hashIBGE, thash *hashNome, ttr
 
                 inserirHash(hashIBGE, &cidade);
                 inserirHash(hashNome, &cidade);
-                inserirArvore(arvore, &arvore->raiz, cidade, 0);
+                inserirArvore(arvore, &arvore->raiz, elemento, 0);
             }
         }
     }

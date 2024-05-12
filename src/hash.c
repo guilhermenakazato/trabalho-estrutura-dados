@@ -52,6 +52,12 @@ int inserirHash(thash *hash, tcidade *bucket) {
     
     hash->vetor[pos] = *bucket;
     hash->qtde_elementos += 1;
+
+    if(strcmp(hash->pegarChave(bucket), "5002704") == 0) {
+        printf("%s\n", hash->vetor[pos].nome);
+        printf("%s\n", hash->vetor[pos].codigo_ibge);
+    }
+
     return EXIT_SUCCESS;
 }
 
@@ -73,7 +79,7 @@ tcidade *buscaPorIBGE(thash hash, const char *chave) {
     return NULL;
 }
 
-tcidade *buscaPorNome(thash hash, const char *chave) {
+char *buscaPorNome(thash hash, const char *chave) {
     int pos;
     int i = 0;
     int cidadesRepetidas = 0;
@@ -87,7 +93,7 @@ tcidade *buscaPorNome(thash hash, const char *chave) {
         pos = (resultadoHash1 + i * resultadoHash2) % hash.tamanho_max;
 
         if(strcmp(chave, hash.vetor[pos].nome) == 0) {
-            cidades[i] = hash.vetor[pos];
+            cidades[cidadesRepetidas] = hash.vetor[pos];
             cidadesRepetidas++;
         }
 
@@ -115,12 +121,12 @@ tcidade *buscaPorNome(thash hash, const char *chave) {
                 printf("Opção inválida!");
             } else {
                 printf("Cidade escolhida com sucesso.\n");
-                return &cidades[escolha - 1];
+                return cidades[escolha - 1].codigo_ibge;
             }
         } while(escolha < 0 && escolha > cidadesRepetidas);
 
     } else if(cidadesRepetidas == 1) {
-        return &cidades[0];
+        return cidades[0].codigo_ibge;
     } else {
         return NULL;
     }

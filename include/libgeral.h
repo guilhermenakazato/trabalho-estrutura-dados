@@ -22,12 +22,17 @@ int hash2(const char *chave);
 int inserirHash(thash *hash, tcidade *bucket);
 int construirHash(thash *hash, char *(*pegarChave)(tcidade *));
 tcidade *buscaPorIBGE(thash hash, const char *chave);
-tcidade *buscaPorNome(thash hash, const char *chave);
+char *buscaPorNome(thash hash, const char *chave);
 void deletarHash(thash *hash);
 
 // abb
+typedef struct {
+    double latitude, longitude;
+    char codigo_ibge[15];
+} telemento; 
+
 typedef struct _no {
-    tcidade cidade;
+    telemento elemento;
     struct _no *esq;
     struct _no *dir;
 } tnode;
@@ -37,7 +42,7 @@ typedef struct {
 } ttree;
 
 typedef struct {
-    tcidade cidade;
+    char codigo_ibge[15];
     double distancia;
 } tvizinho;
 
@@ -47,7 +52,7 @@ typedef struct {
     int qtde_elementos;
 } theap;
 
-int inserirArvore(ttree *arvore, tnode **atual, tcidade node, int nivel);
+int inserirArvore(ttree *arvore, tnode **atual, telemento node, int nivel);
 tvizinho vizinhosProximos(tnode **atual, tcidade *cidade, int nivel, theap *heap);
 void construirArvore(ttree *arvore);
 void destruirArvore(tnode **atual);
