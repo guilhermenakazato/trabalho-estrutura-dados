@@ -16,34 +16,43 @@ void menu() {
     printf("Insira a opção desejada: ");
 }
 
-void infoCidade(tcidade cidade) {
-    printf("\nCódigo da cidade: %s\n", cidade.codigo_ibge);
-    printf("Nome da cidade: %s\n", cidade.nome);
-    printf("Latitude: %f\n", cidade.latitude);
-    printf("Longitude: %f\n", cidade.longitude);
-    printf("É capital? %s\n", cidade.capital == 0 ? "Não" : "Sim");
-    printf("Código UF: %d\n", cidade.codigo_uf);
-    printf("ID SIAFI: %d\n", cidade.siafi_id);
-    printf("DDD: %d\n", cidade.ddd);
-    printf("Fuso horário: %s\n\n", cidade.fuso_horario);
+void infoCidade(tcidade cidade, int tipo, theap heap, int i) {
+    if(tipo == 0) {
+        printf("\nCódigo da cidade: %s\n", cidade.codigo_ibge);
+        printf("Nome da cidade: %s\n", cidade.nome);
+        printf("Latitude: %f\n", cidade.latitude);
+        printf("Longitude: %f\n", cidade.longitude);
+        printf("É capital? %s\n", cidade.capital == 0 ? "Não" : "Sim");
+        printf("Código UF: %d\n", cidade.codigo_uf);
+        printf("ID SIAFI: %d\n", cidade.siafi_id);
+        printf("DDD: %d\n", cidade.ddd);
+        printf("Fuso horário: %s\n\n", cidade.fuso_horario);
+    } else {        
+        printf("%4d |%8.2fkm |%10s | %-32s |%11f |%11f |   %s   | %d |%9d |%4d | %-28s |\n",
+                i + 1, heap.vizinhos[i].distancia * 100, cidade.codigo_ibge,
+                cidade.nome, cidade.latitude, cidade.longitude,
+                cidade.capital == 0 ? "Não" : "Sim", cidade.codigo_uf,
+                cidade.siafi_id, cidade.ddd, cidade.fuso_horario);
+    }
 }
 
-void buscarCidade(thash hashIBGE, const char *codigoIBGE) {
+void buscarCidade(thash hashIBGE, const char *codigoIBGE, int tipo, theap heap, int i) {
     tcidade *cidade = buscaPorIBGE(hashIBGE, codigoIBGE);
 
     if (cidade == NULL) {
         printf("Cidade não encontrada.\n\n");
     } else {
-        infoCidade(*cidade);
+        infoCidade(*cidade, tipo, heap, i);
     }
 }
+
 void buscarVizinhos(ttree arvore, theap *heap, tcidade *cidade) {
     int n;
 
     printf("Insira a quantidade de vizinhos que deseja buscar: ");
     scanf("%d", &n);
 
-    if (n <= 0) {
+    if (n <= 0 || n >= 5570) {
         printf("Quantidade inválida! Tente novamente.\n\n");
     } else {
         inicializaHeap(heap, n);
@@ -54,27 +63,8 @@ void buscarVizinhos(ttree arvore, theap *heap, tcidade *cidade) {
         for(int i = 0; i < n; i++) {
             printf("%d: %s\n", i + 1, heap->vizinhos[i].codigo_ibge);
         }
-        printf("\n");
     }
 }
-
-// void infoVizinhos(tcidade *cidade, theap *heap, thash hash) {
-//     printf("\nVizinhos mais próximos de %s:\n", cidade->nome);
-//     printf("%4s |%11s |%11s | %-31s |%11s |%11s |%8s | %s | %s | %s | %-28s |\n",
-//             "", "Distância", "Cód. IBGE", "Nome", "Latitude", "Longitude",
-//             "Capital", "UF", "Siafi ID", "DDD", "Fuso");
-//     for (int i = 0; i < heap->qtde_elementos; i++) {
-//         tcidade cidadeAtual = heap->vizinhos[i].cidade;
-
-//         printf("%4d |%8.2fkm |%10s | %-32s |%11f |%11f |   %s   | %d |%9d |%4d | %-28s |\n",
-//                 i + 1, heap->vizinhos[i].distancia * 100, cidadeAtual.codigo_ibge,
-//                 cidadeAtual.nome, cidadeAtual.latitude, cidadeAtual.longitude,
-//                 cidadeAtual.capital == 0 ? "Não" : "Sim", cidadeAtual.codigo_uf,
-//                 cidadeAtual.siafi_id, cidadeAtual.ddd, cidadeAtual.fuso_horario);
-//     }
-
-//     printf("\n");
-// }
 
 int main() {
     int op = 0;
@@ -102,7 +92,7 @@ int main() {
             case 1:
                 printf("Insira o código IBGE da cidade que deseja buscar: ");
                 scanf("%s", codigoIbge);
-                buscarCidade(hashIBGE, codigoIbge);
+                buscarCidade(hashIBGE, codigoIbge, 0, heap, 0);
                 break;
             case 2:
                 printf("Insira o código IBGE da cidade: ");
@@ -130,9 +120,16 @@ int main() {
                         printf("Cidade não encontrada.\n\n");
                     } else {
                         buscarVizinhos(arvore, &heap, cidade);
+
+                        printf("\nInformação das cidades\n");
+                        printf("%4s |%11s |%11s | %-31s |%11s |%11s |%8s | %s | %s | %s | %-28s |\n",
+                        "", "Distância", "Cód. IBGE", "Nome", "Latitude", "Longitude",
+                        "Capital", "UF", "Siafi ID", "DDD", "Fuso");
                         for(int i = 0; i < heap.tamanho_max; i++) {
-                            buscarCidade(hashIBGE, heap.vizinhos[i].codigo_ibge);
+                            buscarCidade(hashIBGE, heap.vizinhos[i].codigo_ibge, 1, heap, i);
                         }
+
+                        printf("\n");
                     }
                 }
                 break;

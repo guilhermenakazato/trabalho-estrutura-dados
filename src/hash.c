@@ -52,12 +52,6 @@ int inserirHash(thash *hash, tcidade *bucket) {
     
     hash->vetor[pos] = *bucket;
     hash->qtde_elementos += 1;
-
-    if(strcmp(hash->pegarChave(bucket), "5002704") == 0) {
-        printf("%s\n", hash->vetor[pos].nome);
-        printf("%s\n", hash->vetor[pos].codigo_ibge);
-    }
-
     return EXIT_SUCCESS;
 }
 
