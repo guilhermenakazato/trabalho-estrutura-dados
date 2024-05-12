@@ -6,6 +6,7 @@
 #define SEED 0x12345678
 #define SIZE 10007
 
+
 uint32_t hash1(const char *chave, uint32_t seed) {
     for (; *chave; ++chave)  {
         seed ^= *chave;
@@ -108,17 +109,18 @@ char *buscaPorNome(thash hash, const char *chave) {
         }
         
         do {
+            printf("Selecione: ");
             scanf("%d", &escolha);
 
-            if(escolha < 0 && escolha > cidadesRepetidas) {
-                printf("Opção inválida!");
+            if(escolha < 0 || escolha > cidadesRepetidas) {
+                printf("Opção inválida!\n");
             } else {
                 printf("Cidade escolhida com sucesso.\n");
                 strcpy(codigoIbge, cidades[escolha - 1].codigo_ibge);
                 free(cidades);
                 return codigoIbge;
             }
-        } while(escolha < 0 && escolha > cidadesRepetidas);
+        } while(escolha < 0 || escolha > cidadesRepetidas);
     } else if(cidadesRepetidas == 1) {
         strcpy(codigoIbge, cidades[0].codigo_ibge);
         free(cidades);

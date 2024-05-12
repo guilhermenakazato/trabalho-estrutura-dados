@@ -72,15 +72,6 @@ tvizinho acessa_max(tvizinho vetor[]) {
     return vetor[0];
 }
 
-tvizinho extrai_max(tvizinho vetor[], theap *heap) {
-    tvizinho max = vetor[0];
-    heap->qtde_elementos--;
-    vetor[0] = vetor[heap->qtde_elementos];
-
-    desce(vetor, 0, *heap);
-    return max;
-}
-
 void altera_prioridade(tvizinho vetor[], theap heap, int n, tvizinho novoVizinho) {
     if(vetor[n].distancia < novoVizinho.distancia) {
         vetor[n] = novoVizinho;
