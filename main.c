@@ -65,7 +65,6 @@ void buscarVizinhos(ttree arvore, theap *heap, tcidade *cidade) {
         }
 
         printf("\n");
-        apagaHeap(heap);
     }
 }
 
@@ -106,7 +105,9 @@ int main() {
                     printf("Cidade não encontrada.\n\n");
                 } else {
                     buscarVizinhos(arvore, &heap, cidade);
+                    apagaHeap(&heap);
                 }
+                
                 break;
             case 3:
                 char nome[50];
@@ -118,6 +119,7 @@ int main() {
 
                 if (resultado == NULL) {
                     printf("Cidade não encontrada.\n\n");
+                    free(resultado);
                 } else {
                     strcpy(codigoIbge, resultado);
                     cidade = buscaPorIBGE(hashIBGE, codigoIbge);
@@ -127,7 +129,7 @@ int main() {
                         printf("Cidade não encontrada.\n\n");
                     } else {
                         buscarVizinhos(arvore, &heap, cidade);
-
+                        
                         printf("\nInformação das cidades\n");
                         printf("%4s |%11s |%11s | %-31s |%11s |%11s |%8s | %s | %s | %s | %-28s |\n",
                         "", "Distância", "Cód. IBGE", "Nome", "Latitude", "Longitude",
@@ -136,6 +138,7 @@ int main() {
                             buscarCidade(hashIBGE, heap.vizinhos[i].codigo_ibge, 1, heap, i);
                         }
 
+                        apagaHeap(&heap);
                         printf("\n");
                     }
                 }
