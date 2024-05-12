@@ -77,6 +77,7 @@ char *buscaPorNome(thash hash, const char *chave) {
     int pos;
     int i = 0;
     int cidadesRepetidas = 0;
+    char *codigoIbge = (char *) malloc(sizeof(char) * 15);
     
     tcidade *cidades;
     cidades = (tcidade *) malloc(sizeof(tcidade) * 10);
@@ -115,13 +116,17 @@ char *buscaPorNome(thash hash, const char *chave) {
                 printf("Opção inválida!");
             } else {
                 printf("Cidade escolhida com sucesso.\n");
-                return cidades[escolha - 1].codigo_ibge;
+                strcpy(codigoIbge, cidades[escolha - 1].codigo_ibge);
+                return codigoIbge;
             }
         } while(escolha < 0 && escolha > cidadesRepetidas);
-
+        free(cidades);
     } else if(cidadesRepetidas == 1) {
-        return cidades[0].codigo_ibge;
+        strcpy(codigoIbge, cidades[0].codigo_ibge);
+        free(cidades);
+        return codigoIbge;
     } else {
+        free(cidades);
         return NULL;
     }
 

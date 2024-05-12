@@ -63,6 +63,9 @@ void buscarVizinhos(ttree arvore, theap *heap, tcidade *cidade) {
         for(int i = 0; i < n; i++) {
             printf("%d: %s\n", i + 1, heap->vizinhos[i].codigo_ibge);
         }
+
+        printf("\n");
+        apagaHeap(heap);
     }
 }
 
@@ -107,14 +110,18 @@ int main() {
                 break;
             case 3:
                 char nome[50];
+                char *resultado;
+
                 printf("Insira o nome da cidade: ");
                 scanf("%[^\n]s", nome);
-                strcpy(codigoIbge, buscaPorNome(hashNome, nome));
+                resultado = buscaPorNome(hashNome, nome);
 
-                if (codigoIbge == NULL) {
+                if (resultado == NULL) {
                     printf("Cidade não encontrada.\n\n");
                 } else {
+                    strcpy(codigoIbge, resultado);
                     cidade = buscaPorIBGE(hashIBGE, codigoIbge);
+                    free(resultado);
 
                     if (cidade == NULL) {
                         printf("Cidade não encontrada.\n\n");
@@ -134,13 +141,13 @@ int main() {
                 }
                 break;
             case 4: 
-                printf("Tchau!\n");
+                printf("Tchau!\n\n");
                 break;
             default:
                 printf("Opção inválida!\n\n");
                 break;
             }
-        } while (op != 3);
+        } while (op != 4);
 
         destruirArvore(&arvore.raiz);
         deletarHash(&hashIBGE);

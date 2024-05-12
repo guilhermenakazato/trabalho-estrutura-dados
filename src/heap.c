@@ -112,3 +112,7 @@ void heap_sort(tvizinho vetor[], theap heap) {
         desce(vetor, 0, heap);
     }
 }
+
+void apagaHeap(theap *heap) {
+    free(heap->vizinhos);
+}
